@@ -1,0 +1,45 @@
+server.dll + F3569 ----> mov ecx, eax
+
+Sets my weapon after the call just above (server.dll + c7b20)
+
+server.dll+c7b48 : this func is called whenever player& is not set
+
+Global entity list: 61493fb8 (server.CreateInterface+149f84)
+CreateInterface is an exported dll function
+
+Just in case -- "server.dll"+0003B8AC
+
+My thoughts: 
+
+"global entity list"eax + (0x80*8) + 0x4 = weapon&
+
+How did I get 0x80?
+
+ecx = 350ef3d8
+mov ecx, [ecx+0x7E4] ; ecx = 0x54A2040
+and ecx, 0x00000FFF ; 0x40
+add ecx, ecx ; 0x80
+
+___________
+client.dll
+
+Shoot function at client.dll+20DB52
+looking for:
+
+1. 352AD008 where is it set? that's your GetMyCurrentWeapon()
+2. Fire weapon start
+
+________________
+
+client.dll+20DADC -> test if weapon fired. EDI will point to the weapon&
+If ESI == EDI, then we have a gunshot
+
+
+
+EntityBase+0x578
++0x2C = HEAD
+
+Adjust your own head to eyes: -27dec
+
+
+
